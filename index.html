@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velours.pk — Soft luxury, made in Pakistan</title>
-<meta name="description" content="Velours.pk — a modern Pakistani brand. Storefront and private admin for invoicing and inventory.">
-<meta name="theme-color" content="#0b0b0e">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0e'/%3E%3Ctext x='32' y='44' font-size='38' text-anchor='middle' fill='%23c9a96e' font-family='Georgia,serif'%3EV%3C/text%3E%3C/svg%3E">
+<title>Velours.pk — Skincare built on active ingredients</title>
+<meta name="description" content="Velours.pk — serums, creams, cleanser and SPF60 sunscreen from Lahore, Pakistan. Storefront and private admin for invoicing and inventory.">
+<meta name="theme-color" content="#07090d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307090d'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23c9a96e' font-family='Georgia,serif'%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="scan" aria-hidden="true"></div>
 <div class="glow" id="glow" aria-hidden="true"></div>
 
 <!-- ========== PUBLIC STOREFRONT ========== -->
@@ -21,7 +23,7 @@
     <a class="logo" href="#/">Velours<span>.pk</span></a>
     <nav>
       <a href="#collection" data-scroll>Collection</a>
-      <a href="#about" data-scroll>Our story</a>
+      <a href="#about" data-scroll>About</a>
       <a href="#contact" data-scroll>Contact</a>
       <a class="btn btn-ghost sm" href="#/admin/dashboard">Admin</a>
     </nav>
@@ -29,21 +31,35 @@
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow reveal">Est. in Pakistan</p>
-      <h1 class="reveal">Soft luxury,<br><em>woven with intention.</em></h1>
-      <p class="lead reveal">Velours is a modern Pakistani label for people who prefer quiet confidence — rich textures, deep colours, and pieces made to be kept.</p>
+      <p class="eyebrow reveal">Skincare // Lahore, Pakistan</p>
+      <h1 class="reveal">Skincare built on<br><em>active ingredients.</em></h1>
+      <p class="lead reveal">Serums, creams, cleanser and SPF60 sunscreen made around the actives people actually look for: niacinamide, retinol, hyaluronic acid, vitamin C and glycolic acid. Simple routines, honest pricing.</p>
       <div class="hero-cta reveal">
-        <a class="btn btn-gold" href="#collection" data-scroll>Explore the collection</a>
-        <a class="btn btn-ghost" href="#about" data-scroll>Our story</a>
+        <a class="btn btn-gold" href="#collection" data-scroll>Shop the range</a>
+        <a class="btn btn-ghost" href="#about" data-scroll>About Velours</a>
       </div>
     </div>
-    <div class="hero-orb" aria-hidden="true"></div>
+    <aside class="hud reveal" aria-hidden="true">
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+      <div class="hud-core">V</div>
+      <ul class="readout">
+        <li><span>SKUs</span><b id="hSku">--</b></li>
+        <li><span>Serums</span><b id="hSer">--</b></li>
+        <li><span>Bundles</span><b id="hBun">--</b></li>
+        <li><span>From</span><b id="hMin">--</b></li>
+      </ul>
+    </aside>
     <div class="scroll-cue" aria-hidden="true"></div>
   </section>
 
+  <div class="ticker" aria-hidden="true"><div class="track">
+    <span>NIACINAMIDE</span><span>RETINOL</span><span>HYALURONIC ACID</span><span>VITAMIN C</span><span>GLYCOLIC ACID</span><span>SPF60</span><span>CLEANSER MILK</span><span>BRIGHTENING CREAM</span>
+    <span>NIACINAMIDE</span><span>RETINOL</span><span>HYALURONIC ACID</span><span>VITAMIN C</span><span>GLYCOLIC ACID</span><span>SPF60</span><span>CLEANSER MILK</span><span>BRIGHTENING CREAM</span>
+  </div></div>
+
   <section class="section" id="collection">
     <div class="wrap">
-      <p class="eyebrow reveal">The collection</p>
+      <p class="eyebrow reveal">The range</p>
       <h2 class="reveal">Currently available</h2>
       <div class="chips reveal" id="chips"></div>
       <div class="grid" id="shop"></div>
@@ -53,15 +69,15 @@
   <section class="section alt" id="about">
     <div class="wrap two">
       <div class="reveal">
-        <p class="eyebrow">Our story</p>
-        <h2>Named for velvet.<br>Built on detail.</h2>
+        <p class="eyebrow">About</p>
+        <h2>Velours means velvet.<br><em>That's the goal for your skin.</em></h2>
       </div>
       <div class="reveal">
-        <p>The word <em>velours</em> means velvet — a fabric that changes with the light and gets better with wear. That is how we think about every piece: considered materials, honest pricing, and finishing that holds up.</p>
+        <p>Velours is a skincare brand based in Lahore. We focus on a small, clear range: targeted serums, a brightening cream, a gentle cleanser and daily SPF60 protection, plus bundles that put a routine together for you.</p>
         <div class="stats">
-          <div><b data-count="100">0</b><span>% considered design</span></div>
-          <div><b data-count="48">0</b><span>hr dispatch target</span></div>
-          <div><b data-count="1">0</b><span>promise: quality first</span></div>
+          <div><b id="sP" data-count="0">0</b><span>products</span></div>
+          <div><b id="sS" data-count="0">0</b><span>active serums</span></div>
+          <div><b id="sB" data-count="0">0</b><span>routine bundles</span></div>
         </div>
       </div>
     </div>
@@ -71,13 +87,14 @@
     <div class="wrap center">
       <p class="eyebrow reveal">Get in touch</p>
       <h2 class="reveal">Order or enquire</h2>
-      <p class="muted reveal">Message us to place an order. We confirm availability, then send you an invoice.</p>
+      <p class="muted reveal">Message us on WhatsApp to place an order, or follow us for new drops and routines.</p>
       <div class="hero-cta reveal" id="contactLinks"></div>
     </div>
   </section>
 
   <footer class="foot">
     <span>© <span id="yr"></span> Velours.pk — All rights reserved.</span>
+    <span class="socials" id="socials"></span>
     <a href="#/admin/dashboard">Admin</a>
   </footer>
 </div>
@@ -92,6 +109,7 @@
       <a href="#/admin/invoices" data-nav="invoices"><i>❏</i> Invoices</a>
       <a href="#/admin/settings" data-nav="settings"><i>⚙</i> Data</a>
     </nav>
+    <div class="sys"><span class="pulse"></span> LOCAL STORAGE<br><small id="clock">--:--:--</small></div>
     <a class="side-foot" href="#/">← View storefront</a>
   </aside>
   <div class="main">

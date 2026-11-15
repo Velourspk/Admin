@@ -5,13 +5,17 @@
 /* ---------- CONFIG: edit these ---------- */
 const CFG = {
   brand: 'Velours.pk',
-  address: 'Pakistan',
-  whatsapp: '',   // e.g. '923001234567' (country code, no +)
-  email: '',      // e.g. 'hello@velours.pk'
-  instagram: '',  // e.g. 'https://instagram.com/velours.pk'
+  address: 'Lahore, Pakistan',
+  website: 'https://velours.pk',
+  whatsapp: '923269121444',
+  email: 'velourspk@gmail.com',
+  instagram: 'https://www.instagram.com/velourspk/',
+  tiktok: 'https://www.tiktok.com/@velourspk',
+  facebook: 'https://www.facebook.com/people/Velours/61573967205135/',
+  youtube: 'https://www.youtube.com/VeloursPk',
   lowStockDefault: 5
 };
-const KEY = 'velours.v1';
+const KEY = 'velours.v2';
 
 /* ---------- helpers ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -26,30 +30,25 @@ const grad = s => `linear-gradient(135deg,hsl(${hue(s)} 38% 24%),hsl(${(hue(s) +
 
 /* ---------- data ---------- */
 function seed() {
-  const P = (sku, name, category, price, cost, qty, reorder) => ({ id: uid(), sku, name, category, price, cost, qty, reorder, img: '' });
+  // Real Velours.pk catalogue (names, prices, images from velours.pk). Stock and cost are placeholders: edit them in Inventory.
+  const I = f => 'https://velours.pk/cdn/shop/files/' + f + '&width=720';
+  const P = (sku, name, category, price, img) => ({ id: uid(), sku, name, category, price, cost: 0, qty: 20, reorder: 5, img });
   const products = [
-    P('VLR-001', 'Velvet Wrap Shawl', 'Apparel', 6500, 3200, 14, 5),
-    P('VLR-002', 'Noir Satin Abaya', 'Apparel', 12500, 6400, 8, 4),
-    P('VLR-003', 'Gold Edge Clutch', 'Accessories', 4800, 2100, 3, 5),
-    P('VLR-004', 'Silk Scrunchie Set', 'Accessories', 1800, 650, 40, 10),
-    P('VLR-005', 'Plush Cushion Cover', 'Home', 2900, 1300, 22, 6),
-    P('VLR-006', 'Velour Throw Blanket', 'Home', 8900, 4600, 6, 3)
+    P('VLR-001', 'Anti-Aging Brightening Cream — 30g', 'Creams', 1595, I('5.png?v=1768298004')),
+    P('VLR-002', 'Brightening Cream & Serum Bundle', 'Bundles', 3750, I('SM_Posts_-_VPK_845cc2df-e60b-4e4b-9c5f-8bee36f3f9b2.png?v=1761809611')),
+    P('VLR-003', 'Cleanser Milk Facewash — 100ml', 'Cleansers', 895, I('2_d67e9ef7-cd85-4afa-abc5-6c4f51be9422.png?v=1761808304')),
+    P('VLR-004', 'Facewash/Sunscreen + Serum Bundle', 'Bundles', 3000, I('27.png?v=1761808325')),
+    P('VLR-005', 'Glycolic Acid Serum — 30ml', 'Serums', 2850, I('7_780e4f59-0d16-430e-9bd2-efb115196d62.jpg?v=1768297729')),
+    P('VLR-006', 'Hyaluronic Acid Serum — 30ml', 'Serums', 2950, I('9_4e6622fb-1a63-4b50-8940-2a4ab8793ba1.jpg?v=1768297826')),
+    P('VLR-007', 'Melasma Treatment Bundle — 3 in 1', 'Bundles', 5250, I('2_75cfa09f-368c-46ca-9824-9eade6daa246.jpg?v=1760174807')),
+    P('VLR-008', 'Niacinamide Serum — 30ml', 'Serums', 2850, I('6.jpg?v=1768297857')),
+    P('VLR-009', 'Retinol Serum — 30ml', 'Serums', 2950, I('10_3026d6ce-8c61-4f56-910e-a13432082d81.jpg?v=1768297889')),
+    P('VLR-010', 'Serum Set: 2 Premium Serums + Gift', 'Bundles', 5000, I('29.png?v=1761808057')),
+    P('VLR-011', 'Skin Support Set — Niacinamide + Hyaluronic Acid', 'Bundles', 4200, I('producthighresolution4.jpg?v=1768298052')),
+    P('VLR-012', 'Sunscreen SPF60 — 30g', 'Sun Protection', 895, I('4_fe39ec9d-535e-4a49-9cff-ecf238fdb6b4.png?v=1768297978')),
+    P('VLR-013', 'Vitamin C + CG Serum — 30ml', 'Serums', 2850, I('8_0eee067d-0c46-448f-89de-9c37abd020da.jpg?v=1765205818'))
   ];
-  const d = n => { const t = new Date(); t.setDate(t.getDate() - n); return t.toISOString().slice(0, 10); };
-  const mk = (no, date, name, city, items, discount, shipping, method, status) => {
-    const its = items.map(([i, q]) => ({ pid: products[i].id, name: products[i].name, sku: products[i].sku, price: products[i].price, qty: q }));
-    const subtotal = its.reduce((s, x) => s + x.price * x.qty, 0);
-    return { id: uid(), no, date, customer: { name, phone: '', city, address: '' }, items: its, discount, shipping, method, status, subtotal, total: subtotal - discount + shipping };
-  };
-  const invoices = [
-    mk('VLR-0001', d(6), 'Ayesha Khan', 'Lahore', [[0, 1], [3, 2]], 0, 250, 'COD', 'Paid'),
-    mk('VLR-0002', d(4), 'Sara Malik', 'Karachi', [[1, 1]], 500, 300, 'Bank Transfer', 'Paid'),
-    mk('VLR-0003', d(2), 'Hira Tariq', 'Faisalabad', [[4, 2], [5, 1]], 0, 250, 'JazzCash', 'Paid'),
-    mk('VLR-0004', d(0), 'Mahnoor Ali', 'Islamabad', [[2, 1]], 0, 250, 'COD', 'Pending')
-  ];
-  // deduct seeded sales from stock
-  invoices.forEach(inv => inv.items.forEach(it => { const p = products.find(x => x.id === it.pid); }));
-  return { products, invoices, counter: invoices.length };
+  return { products, invoices: [], counter: 0 };
 }
 function load() {
   try { const r = JSON.parse(localStorage.getItem(KEY)); if (r && Array.isArray(r.products) && Array.isArray(r.invoices)) return r; } catch (e) {}
@@ -87,6 +86,7 @@ let invQuery = '', prodQuery = '', shopCat = 'All';
 function route() {
   const h = location.hash;
   const isAdmin = h.startsWith('#/admin');
+  document.body.classList.toggle('is-admin', isAdmin);
   $('#site').hidden = isAdmin; $('#admin').hidden = !isAdmin;
   $('#glow').style.display = 'block';
   if (isAdmin) {
@@ -120,18 +120,31 @@ function renderShop() {
       <div class="info"><div class="cat">${esc(p.category)}</div><h3>${esc(p.name)}</h3>
       <div class="row"><span class="price">${fmt(p.price)}</span>${low(p) ? '<span class="tag low">Few left</span>' : order}</div></div></article>`;
   }).join('') : `<div class="empty">New pieces arriving soon.</div>`;
+  const ext = (u, t, c = 'btn btn-ghost') => `<a class="${c}" target="_blank" rel="noopener" href="${esc(u)}">${t}</a>`;
   const links = [];
-  if (CFG.whatsapp) links.push(`<a class="btn btn-gold" target="_blank" rel="noopener" href="https://wa.me/${esc(CFG.whatsapp)}">WhatsApp us</a>`);
-  if (CFG.instagram) links.push(`<a class="btn btn-ghost" target="_blank" rel="noopener" href="${esc(CFG.instagram)}">Instagram</a>`);
+  if (CFG.whatsapp) links.push(ext('https://wa.me/' + CFG.whatsapp, 'Order on WhatsApp', 'btn btn-gold'));
+  if (CFG.instagram) links.push(ext(CFG.instagram, 'Instagram'));
+  if (CFG.tiktok) links.push(ext(CFG.tiktok, 'TikTok'));
+  if (CFG.facebook) links.push(ext(CFG.facebook, 'Facebook'));
+  if (CFG.youtube) links.push(ext(CFG.youtube, 'YouTube'));
   if (CFG.email) links.push(`<a class="btn btn-ghost" href="mailto:${esc(CFG.email)}">Email</a>`);
-  $('#contactLinks').innerHTML = links.join('') || '<span class="muted">Contact details coming soon.</span>';
+  $('#contactLinks').innerHTML = links.join('');
+  $('#socials').innerHTML = [['Instagram', CFG.instagram], ['TikTok', CFG.tiktok], ['Facebook', CFG.facebook], ['YouTube', CFG.youtube], ['velours.pk', CFG.website]].filter(x => x[1]).map(([t, u]) => `<a target="_blank" rel="noopener" href="${esc(u)}">${t}</a>`).join('');
   $('#yr').textContent = new Date().getFullYear();
+  renderStats();
+}
+function renderStats() {
+  const all = db.products, ser = all.filter(p => p.category === 'Serums').length, bun = all.filter(p => p.category === 'Bundles').length;
+  const min = all.length ? Math.min(...all.map(p => p.price)) : 0;
+  const pad = n => String(n).padStart(2, '0');
+  $('#hSku').textContent = pad(all.length); $('#hSer').textContent = pad(ser); $('#hBun').textContent = pad(bun); $('#hMin').textContent = fmt(min);
+  [['#sP', all.length], ['#sS', ser], ['#sB', bun]].forEach(([id, n]) => { const el = $(id); el.dataset.count = n; el.textContent = n; });
 }
 let io;
 function observe() {
   io && io.disconnect();
   io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.querySelector('[data-count]')) countUp(e.target); }
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.querySelector('[data-count]') && !e.target.dataset.counted) { e.target.dataset.counted = 1; countUp(e.target); } }
   }), { threshold: .12 });
   $$('#site .reveal').forEach(el => io.observe(el));
   const st = $('.stats'); if (st) io.observe(st.parentElement);
@@ -324,7 +337,7 @@ function invoiceForm() {
 }
 function invoiceHTML(i) {
   return `<div class="inv">
-    <div class="head"><div><div class="brand">Velours<span>.pk</span></div><div style="font-size:.82rem;color:#666">${esc(CFG.address)}${CFG.email ? '<br>' + esc(CFG.email) : ''}${CFG.whatsapp ? '<br>WhatsApp +' + esc(CFG.whatsapp) : ''}</div></div>
+    <div class="head"><div><div class="brand">Velours<span>.pk</span></div><div style="font-size:.82rem;color:#666">${esc(CFG.address)}<br>velours.pk${CFG.email ? '<br>' + esc(CFG.email) : ''}${CFG.whatsapp ? '<br>WhatsApp +' + esc(CFG.whatsapp) : ''}</div></div>
     <div class="meta"><h2>INVOICE</h2><b>${esc(i.no)}</b><br>${niceDate(i.date)}<br><span class="stamp ${i.status === 'Paid' ? 'paid' : 'pending'}">${i.status.toUpperCase()}</span></div></div>
     <div class="bill"><b>Billed to</b>${esc(i.customer.name)}<br>${i.customer.phone ? esc(i.customer.phone) + '<br>' : ''}${esc(i.customer.address)}${i.customer.address && i.customer.city ? ', ' : ''}${esc(i.customer.city)}<br><span style="color:#777">Payment: ${esc(i.method)}</span></div>
     <table><thead><tr><th>Item</th><th class="num">Price</th><th class="num">Qty</th><th class="num">Amount</th></tr></thead><tbody>
@@ -376,5 +389,35 @@ document.addEventListener('click', e => {
 });
 window.addEventListener('afterprint', () => { $('#printArea').innerHTML = ''; });
 
+function initNet() {
+  const cv = $('#net'), cx = cv.getContext('2d');
+  if (!cx || matchMedia('(prefers-reduced-motion: reduce)').matches) { cv.style.display = 'none'; return; }
+  let w = 0, h = 0, nodes = [];
+  const mouse = { x: -999, y: -999 };
+  const build = () => {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    nodes = Array.from({ length: Math.min(70, Math.floor(w * h / 22000)) }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35 }));
+  };
+  addEventListener('resize', build);
+  addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  const step = () => {
+    cx.clearRect(0, 0, w, h);
+    for (const n of nodes) { n.x += n.vx; n.y += n.vy; if (n.x < 0 || n.x > w) n.vx *= -1; if (n.y < 0 || n.y > h) n.vy *= -1; }
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      cx.fillStyle = 'rgba(77,226,255,.7)'; cx.fillRect(a.x - 1, a.y - 1, 2, 2);
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 130) { cx.strokeStyle = `rgba(77,226,255,${.16 * (1 - d / 130)})`; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke(); }
+      }
+      const dm = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+      if (dm < 170) { cx.strokeStyle = `rgba(201,169,110,${.35 * (1 - dm / 170)})`; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(mouse.x, mouse.y); cx.stroke(); }
+    }
+    requestAnimationFrame(step);
+  };
+  build(); step();
+}
+setInterval(() => { const c = $('#clock'); if (c) c.textContent = new Date().toLocaleTimeString('en-GB'); }, 1000);
+initNet();
 route();
 })();
